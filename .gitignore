@@ -1,0 +1,3 @@
+# Ignore the Data folder inside 2-Docker_Postgres
+2-Docker_Postgres/Data/
+2-Docker_Postgres/Taxi_data
