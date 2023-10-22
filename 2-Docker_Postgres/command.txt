@@ -21,28 +21,44 @@ docker run -it -p 8080:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN
 
 docker network create pg-network
 
-docker run -it 
-    -e POSTGRES_USER="root" 
-    -e POSTGRES_PASSWORD="root" 
-    -e POSTGRES_DB="ny_taxi" 
-    -v C:/Users/PC/OneDrive/Documents/personal_projects/DataEng101/2-Docker_Postgres/Data:/var/lib/postgresql/data 
-    -p 5432:5432 
-    --network=pg-network
-    --name=pg-db
-    postgres:16
+docker run -it `
+    -e POSTGRES_USER="root" `
+    -e POSTGRES_PASSWORD="root" `
+    -e POSTGRES_DB="ny_taxi" `
+    -v C:/Users/PC/OneDrive/Documents/personal_projects/DataEng101/2-Docker_Postgres/Data:/var/lib/postgresql/data `
+    -p 5432:5432 `
+    --network=pg-network `
+    --name=pg-db `
+    postgres:16 `
 
-docker run -it 
-    -p 8080:80 
-    -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' 
-    -e 'PGADMIN_DEFAULT_PASSWORD=root' 
-    --network=pg-network
-    --name=pg-admin
-    -d dpage/pgadmin4
-
-
-docker run -it -p 8080:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=root' --network=pg-network --name=pg-admin -d dpage/pgadmin4
+docker run -it `
+    -p 8080:80 `
+    -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' `
+    -e 'PGADMIN_DEFAULT_PASSWORD=root' `
+    --network=pg-network `
+    --name=pg-admin `
+    -d dpage/pgadmin4 `
 
 ## pipeline 
 
-python dirtypipeline.py --user=root --password=root --host=localhost --port=5432 --db=ny_taxi --table_name=taxi_yellow --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz
+python dirtypipeline.py `
+    --user=root  `
+    --password=root `
+    --host=localhost `
+    --port=5432 `
+    --db=ny_taxi `
+    --table_name=taxi_yellow `
+    --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz `
 
+## Running the pipeline python script using docker
+
+docker run -it `
+    --network=pg-network `
+    simpleingestion:001 `
+        --user=root `
+        --password=root `
+        --host=pg-db `
+        --port=5432 `
+        --db=ny_taxi `
+        --table_name=taxi_yellow `
+        --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz

@@ -15,23 +15,29 @@ def main(params):
     table_name = params.table_name
     url = params.url
 
-    csv_name = "Taxi_data/Yellow_taxi.csv.gz"
-    
+    csv_name = "/app/Yellow_taxi.csv.gz" #! The file will be stored into the container directory which is /app
+
+    t_start = time()
     response = requests.get(url)
     with open(csv_name, 'wb') as file:
         file.write(response.content)
+    t_end = time()
+    print("Loaded Zip, took %.3f seconds" % (t_end - t_start))
 
     engine = create_engine(f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}")
 
     t_start = time()
     df = pd.read_csv(csv_name,compression='gzip')
-    df = df.head(1000)
+    t_end = time()
+    print("Unzipped into DataFrame, took %.3f seconds" % (t_end - t_start))
+
+    df = df.head(100001)
     df['tpep_pickup_datetime'] = pd.to_datetime(df['tpep_pickup_datetime'])
     df['tpep_dropoff_datetime'] = pd.to_datetime(df['tpep_dropoff_datetime'])
+    t_start = time()
     df.to_sql(name=table_name, con=engine,index=False, if_exists="replace")
     t_end = time()
-
-    print("Inserted table, took %.3f seconds" % (t_end - t_start))
+    print("Ingested DataFrame into postgres, took %.3f seconds" % (t_end - t_start))
 
 
 if __name__ == '__main__' :
