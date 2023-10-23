@@ -1,21 +1,22 @@
 This command create a Postges container with login, DB name, Location to store the data, Port
-
-docker run -it 
-    -e POSTGRES_USER="root" 
-    -e POSTGRES_PASSWORD="root" 
-    -e POSTGRES_DB="ny_taxi" 
-    -v C:/Users/PC/OneDrive/Documents/personal_projects/DataEng101/2-Docker_Postgres/Data:/var/lib/postgresql/data 
-    -p 5432:5432 
+We use the -v Flag because if we don't, by default the database data will be stored inside the container
+but when we stop/remove the container the data is lost. So when we use -v the data is stored inside our host machine.
+(-v host-directory:container-directory) we create a connection (mount) the two path together
+docker run -it `
+    -e POSTGRES_USER="root" `
+    -e POSTGRES_PASSWORD="root" `
+    -e POSTGRES_DB="ny_taxi" `
+    -v C:/Users/PC/OneDrive/Documents/personal_projects/DataEng101/2-Docker_Postgres/Data:/var/lib/postgresql/data `
+    -p 5432:5432 `
     postgres:16
 
+This command create a pgadmin server on localhost:8080 (pgadmin is a GUI interface to interact with postgres)
 
-docker run -it 
-    -p 8080:80 
-    -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' 
-    -e 'PGADMIN_DEFAULT_PASSWORD=root' 
+docker run -it `
+    -p 8080:80 `
+    -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' `
+    -e 'PGADMIN_DEFAULT_PASSWORD=root' `
     -d dpage/pgadmin4
-
-docker run -it -p 8080:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=root' -d dpage/pgadmin4
 
 ## Create network
 
