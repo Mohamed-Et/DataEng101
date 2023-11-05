@@ -1,3 +1,8 @@
 # Ignore the Data folder inside 2-Docker_Postgres
 2-Docker_Postgres/Data/
 2-Docker_Postgres/Taxi_data
+3-Terraform/gcp_auth_initial.json
+3-Terraform/variables.tf
+3-Terraform/terraform.tfstate
+3-Terraform/.terraform.lock.hcl
+3-Terraform/.terraform/

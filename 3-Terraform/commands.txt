@@ -1,0 +1,6 @@
+# To connect the sdk with the gcp project
+gcloud init 
+# Check to what google account / project we are connected
+gcloud config configuration list 
+# Initialise terraform
+terraform init
