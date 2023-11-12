@@ -1,0 +1,76 @@
+# Link : https://cloud.google.com/compute/docs/connect/create-ssh-keys?hl=fr#windows-10-or-later
+1- Generate SSH Keys using this command : ssh-keygen -t rsa -f C:\Users\PC\.ssh\gcp -C medet -b 2048
+2- Add The ssh keys in the google cloud platform, specifically in : https://console.cloud.google.com/compute/metadata
+    We copy paste the public key which was generated in C:\Users\PC\.ssh\gcp.pub 
+3- Create a VM while specifying : 
+    CPU / RAM / Operating system / region ....
+4- Connect to the VM using SSH with the command : ssh -i C:/Users/PC/.ssh/gcp medet@34.155.222.96
+    34.155.222.96 is the external IP adress of the VM
+    medet is our username
+5- used command when connected to VM via ssh : 
+    htop
+6- download anaconda using wget https://repo.anaconda.com/archive/Anaconda3-2023.09-0-Linux-x86_64.sh
+
+                           bash Anaconda3-2023.09-0-Linux-x86_64.sh
+    installation finished.
+    Do you wish to update your shell profile to automatically initialize conda?
+    This will activate conda on startup and change the command prompt when activated.
+    If you'd prefer that conda's base environment not be activated on startup,
+    run the following command when conda is activated:
+
+    conda config --set auto_activate_base false
+7- change config file in C:\Users\PC\.ssh\config 
+    Host de-zoomcamp
+        HostName 34.155.222.96
+        IdentityFile "C:/Users/PC/.ssh/gcp"
+        User medet
+Now we can simply run the command 'ssh de-zoomcamp' & we will connect to the vm instance
+
+8- When connected to the vm via SSh, we can type 'python' and run python code
+
+9- sudo apt-get update => fetch list of packages
+
+10- follow the instructions in this site to be able to run docker commands without sudo every time : https://github.com/sindresorhus/guides/blob/main/docker-without-sudo.md
+
+11- Create Bin folder to store all executables 
+
+12- download docker compose by running : wget https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -O docker-compos
+
+13- chmod +x docker-compose to make the Docker Compose binary executable.
+
+14- add docker-compose to path 
+    nano .bashrc to edit the file 
+    at the end of the file add : export PATH="${HOME}/:bin${PATH}"
+
+15- Clone dataengineering101 repo to run our docker-compose file
+
+16- go to ~/DataEng101/2-Docker_Postgres directory which has the compose.yaml file we configured previously and run : 
+    docker-compose up -d
+
+17- pip install pgcli (on home directory)
+
+18- run the command : pgcli -h localhost -U root -d ny_taxi (to connect to the postgres container (table : ny_taxi) we just ran using docker)
+
+19- postgres:16 (created using docker-compose) is running on port 5432
+    we will forward that port to our local machine so we can interact with postgres instance locally (localhost:5432)
+    But this won't work for our case because we have problems installing pgcli locally (we used pgadmin)
+
+    However we do the same thing for pgadmin (forward port 8080 locally) now we can go to localhost:8080 locally and interact
+    with the pgadmin container which is running on the VM
+
+20- Download terraform on bin folder using : wget https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip
+
+21- Copy the terraform json cridentials to the VM using SFTP using => 
+     sftp de-zoomcamp
+    Create an empty folder in root called .gc =>
+    mkdir .gc
+    copy paste the file =>
+    put gcp_auth_initial.json
+
+22- (base) medet@zoomcamp101:~/DataEng101/3-Terraform$ export GOOGLE_APPLICATION_CREDENTIALS=~/.gc/gcp_auth_initial.json ??
+
+23 - gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS ???
+
+24 - terraform init
+
+25 - terraform plan
